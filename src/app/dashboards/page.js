@@ -304,7 +304,7 @@ export default function Dashboards() {
         {/* Tavily Expert Section (static) */}
         <section className="bg-blue-50 rounded-xl shadow p-6">
           <h3 className="text-lg font-bold mb-2">Tavily Expert</h3>
-          <p className="text-gray-600 mb-4">Your expert is a specialized agent, always up to date with Tavily's latest documentation and best practices. To be used in AI-native IDEs to accurately implement and test Tavily tools within your application.</p>
+          <p className="text-gray-600 mb-4">Your expert is a specialized agent, always up to date with Tavily&apos;s latest documentation and best practices. To be used in AI-native IDEs to accurately implement and test Tavily tools within your application.</p>
           <button className="bg-blue-600 text-white rounded px-4 py-2 font-semibold">Get your Tavily Expert</button>
         </section>
       </main>
