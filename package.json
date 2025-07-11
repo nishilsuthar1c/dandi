@@ -16,6 +16,7 @@
     "langchain": "^0.3.29",
     "langsmith": "^0.3.42",
     "next": "15.3.5",
+    "next-auth": "^4.24.11",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "typescript": "^5.8.3"

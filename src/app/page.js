@@ -1,8 +1,10 @@
 "use client";
 
 import Image from "next/image";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 export default function Home() {
+  const { data: session } = useSession();
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
@@ -52,9 +54,31 @@ export default function Home() {
             Read our docs
           </a>
         </div>
+        <div className="flex flex-col items-center w-full mt-4">
+          {!session ? (
+            <button
+              className="rounded-full border border-solid border-blue-500 transition-colors flex items-center justify-center bg-blue-600 text-white gap-2 hover:bg-blue-700 font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
+              onClick={() => signIn("google")}
+            >
+              Sign in with Google
+            </button>
+          ) : (
+            <div className="flex flex-col items-center gap-2">
+              <p>Welcome, {session.user.name}!</p>
+              <button
+                className="rounded-full border border-solid border-gray-500 transition-colors flex items-center justify-center bg-gray-600 text-white gap-2 hover:bg-gray-700 font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
+                onClick={() => signOut()}
+              >
+                Sign out
+              </button>
+            </div>
+          )}
+        </div>
         <button
-          className="rounded-full border border-solid border-blue-500 transition-colors flex items-center justify-center bg-blue-600 text-white gap-2 hover:bg-blue-700 font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 mt-4"
-          onClick={() => window.location.href = '/dashboards'}
+          className="rounded-full border border-solid border-blue-500 transition-colors flex items-center justify-center bg-blue-600 text-white gap-2 hover:bg-blue-700 font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
+          onClick={() => session && (window.location.href = '/dashboards')}
+          disabled={!session}
+          title={!session ? "Please sign in to access the dashboard." : ""}
         >
           Go to Dashboard
         </button>
