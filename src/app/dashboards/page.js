@@ -2,8 +2,11 @@
 import Link from "next/link";
 import { Fragment, useEffect, useState } from "react";
 import { supabase } from "../../../lib/supabaseClient";
+import { useSession } from "next-auth/react";
 
 export default function Dashboards() {
+  const { data: session, status } = useSession();
+  const userEmail = session?.user?.email;
   const [apiKeys, setApiKeys] = useState([]);
   const [newValue, setNewValue] = useState("");
   const [newName, setNewName] = useState("");
@@ -20,25 +23,27 @@ export default function Dashboards() {
 
   // Fetch API keys from Supabase
   useEffect(() => {
+    if (!userEmail) return;
     const fetchKeys = async () => {
       setLoading(true);
       const { data, error } = await supabase
         .from("api_keys")
-        .select("id, name, value, useage, created_at");
+        .select("id, name, value, useage, created_at")
+        .eq("user_email", userEmail);
       if (error) setError(error.message);
       else setApiKeys(data || []);
       setLoading(false);
     };
     fetchKeys();
-  }, []);
+  }, [userEmail]);
 
   // Add new API key
   const handleAdd = async () => {
-    if (newValue.trim() && newName.trim()) {
+    if (newValue.trim() && newName.trim() && userEmail) {
       setLoading(true);
       const { data, error } = await supabase
         .from("api_keys")
-        .insert([{ name: newName.trim(), value: newValue.trim(), useage: 0 }])
+        .insert([{ name: newName.trim(), value: newValue.trim(), useage: 0, user_email: userEmail }])
         .select();
       if (error) setError(error.message);
       else setApiKeys([...apiKeys, ...(data || [])]);
